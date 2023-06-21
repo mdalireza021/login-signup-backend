@@ -17,8 +17,8 @@ app.use(
     })
 );
 
-app.use('/api/demo460', authRouter);
-app.use('/api/demo460', userRouter);
+app.use('/demo460/api/auth', authRouter);
+app.use('/demo460/api', userRouter);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3000;
