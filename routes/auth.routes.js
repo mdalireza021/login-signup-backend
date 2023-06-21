@@ -11,8 +11,8 @@ authRouter.use((req,res,next) => {
     next();
 })
 
-authRouter.post("/auth/login", login);
-authRouter.post("/auth/signup", verifySignUp, signup);
-authRouter.post("/auth/signout", signout);
+authRouter.post("/login", login);
+authRouter.post("/signup", verifySignUp, signup);
+authRouter.post("/signout", signout);
 
 export default authRouter;
