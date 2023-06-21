@@ -1,10 +1,38 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/user.model.js'
+import { secret } from '../config/auth.config.js';
 const saltRounds = 10;
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
+        const user = await User.findOne({ email }).exec();
+        if (!user) {
+            return res.status(404).send({ message: 'User Not found.' });
+        }
+
+        const passwordIsValid = bcrypt.compareSync(password, user.password);
+
+        if (!passwordIsValid) {
+            return res.status(401).send({ message: 'Invalid Password!' });
+        }
+
+        const token = jwt.sign({ id: user.id }, secret, {
+            expiresIn: '72h',
+        });
+
+        req.session.token = token;
+
+        res.status(200).send({
+            id: user._id,
+            username: user.username,
+            email: user.email,
+        });
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
 };
 export const signup = async (req, res) => {
     try {
